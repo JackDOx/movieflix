@@ -11,6 +11,7 @@ const compression = require('compression');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const filmRouter = require('./routes/filmRoutes');
+const userRouter = require('./routes/userRoutes');
 const cookieParser = require('cookie-parser');
 
 
@@ -18,8 +19,8 @@ const app = express();
 
 app.enable('trust proxy');
 // Setting pug engine and the file that hold the pug template: views
-// app.set('view engine', 'pug');
-// app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 // 1) GLOBAL MIDDLEWARE
 
 // Serving static files
@@ -81,6 +82,7 @@ app.use((req,res,next) => {
 // Mounting Routes
 // app.use('/', viewRouter);
  app.use('/api/v1/film', filmRouter);
+ app.use('/api/v1/user', userRouter);
 // app.use('/api/v1/users', userRouter); //tourRouter is a middleware
 // app.use('/api/v1/reviews', reviewRouter);
 // app.use('/api/v1/bookings', bookingRouter);

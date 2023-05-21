@@ -1,0 +1,17 @@
+extends baseEmail
+
+block content
+  p Hi #{firstName},
+  p Welcome to Cinemania, we're glad to have you 🎉🙏
+  p Enjoy your favortie films with the best quality. We are here to bring you happiness. Let's have time with family and friends 🎉🎉🎉
+  table.btn.btn-primary(role='presentation', border='0', cellpadding='0', cellspacing='0')
+    tbody
+      tr
+        td(align='left')
+          table(role='presentation', border='0', cellpadding='0', cellspacing='0')
+            tbody
+              tr
+                td
+                  a(href=`${url}`, target='_blank') Upload user photo
+  p Remember to upgrade your account to premium and watch films without ads, get earliest content and donate us! 🎉
+  p - Jack Do, CEO and founder of Cinemania
