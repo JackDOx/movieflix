@@ -64,7 +64,7 @@ module.exports = (err, req, res, next) => {
       if (err.isOperational) {
         errOptions.msg = err.message;
       };
-      res.status(err.statusCode).render('error', errOptions);
+      res.status(err.statusCode).json(errOptions);
     };
   };
 };
