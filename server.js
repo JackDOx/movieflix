@@ -9,7 +9,7 @@ process.on('uncaightException', err => {
 
 dotenv.config({ path: './config.env'});
 
-const DB = process.env.DATABASE_LOCAL.replace(
+const DB = process.env.DATABASE.replace(
   '<PASSWORD>',
   process.env.DATABASE_PASSWORD
 );
@@ -31,16 +31,16 @@ const server = app.listen(port, () => {
 });
 
 // Handling unhandled exceptions . Ie. database password is wrong
-// process.on('unhandledRejection', err => {
-//   // console.log(err.name, err.message);
-//   server.close(() =>{
-//       process.exit(1);
-//   })
-// });
+process.on('unhandledRejection', err => {
+  // console.log(err.name, err.message);
+  server.close(() =>{
+      process.exit(1);
+  })
+});
 
-// process.on('SIGTERM', () => {
-//   console.log('SIGTERM RECIEVED. Shutting down server');
-//   server.close(() => {
-//       console.log('PROCESS TERMINATED!');
-//   });
-// });
+process.on('SIGTERM', () => {
+  console.log('SIGTERM RECIEVED. Shutting down server');
+  server.close(() => {
+      console.log('PROCESS TERMINATED!');
+  });
+});

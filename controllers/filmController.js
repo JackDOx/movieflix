@@ -10,7 +10,7 @@ const sharp = require('sharp');
 // FACTORY version
 
 exports.getAllFilms = factory.getAll(Film);
-exports.getFilm = factory.getOne(Film);
+exports.getFilm = factory.getOne(Film, { path: 'reviews'});
 exports.createFilm = factory.createOne(Film);
 exports.updateFilm = factory.updateOne(Film);
 exports.deleteFilm = factory.deleteOne(Film);

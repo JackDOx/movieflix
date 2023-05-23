@@ -9,7 +9,7 @@ const filmSchema = new mongoose.Schema(
       required: [true, 'A film must have a name'],
       trim: true,
       maxlength: [30, "A film name must have fewer or equal 30 chars"],
-      minlength: [1, 'A tour name must have more or equal 11 chars']
+      minlength: [1, 'A film name must have more or equal 1 chars']
       // validate: [validator.isAlpha, 'Tour name must only contain chars'] // use of validator
    },
 
@@ -42,6 +42,24 @@ const filmSchema = new mongoose.Schema(
     default: this.name
     },
 
+    poster: {
+      type: String,
+      required: [true, 'A film must have a poster'],
+    },
+
+    filmImage: {
+      type: String,
+      required: [true, 'A film must have an image cut from fim']
+    },
+
+    director: {
+      type: String,
+      trim: true,
+      required: [true, 'A film must have a director'],
+      maxlength: [20, "A name must have fewer or equal 30 chars"],
+      minlength: [1, 'A name must have more or equal 1 chars']
+    },
+
     actors: {
     type: [String],
     trim: true
@@ -51,6 +69,23 @@ const filmSchema = new mongoose.Schema(
       type: [String],
       enum: ['Action', 'Comedy', 'Drama','Fantasy', 'Horror', 'Romance', 'Sci-Fi', 'Thriller', 'Anime', 'K-Drama'],
       required: [true, 'Must have genre tag']
+    },
+
+    ratingsAverage: {
+      type: Number,
+      default: 4.8,
+      min: [1, 'Rating must be above 1.0'],
+      max: [5, 'Rating must be lower 5.0']
+    },
+
+    ratingsQuantity: {
+      type: Number,
+      default: 0
+    },
+
+    hot: {
+      type: Boolean,
+      default: false
     },
 
     views: {
@@ -67,8 +102,16 @@ const filmSchema = new mongoose.Schema(
 );
 
 // INDEXING
+filmSchema.index({ slug: 1});
 
 
+// Virtual populate
+filmSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'film', // the field in Review that holds the reference to the current model
+  localField: '_id' // the name of the field in the current model correspond to the foreign field
+
+});
 // MIDDLEWARE
 
 filmSchema.pre('save', function(next) {

@@ -12,6 +12,7 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const filmRouter = require('./routes/filmRoutes');
 const userRouter = require('./routes/userRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 const cookieParser = require('cookie-parser');
 
 
@@ -83,6 +84,7 @@ app.use((req,res,next) => {
 // app.use('/', viewRouter);
  app.use('/api/v1/film', filmRouter);
  app.use('/api/v1/user', userRouter);
+ app.use('/api/v1/review', reviewRouter);
 // app.use('/api/v1/users', userRouter); //tourRouter is a middleware
 // app.use('/api/v1/reviews', reviewRouter);
 // app.use('/api/v1/bookings', bookingRouter);

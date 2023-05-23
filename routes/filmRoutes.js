@@ -1,7 +1,7 @@
 const express = require('express');
 const filmController = require('./../controllers/filmController');
 const authController = require('./../controllers/authController');
-
+const reviewRoutes  = require('./reviewRoutes');
 const router = express.Router();
 
 
@@ -14,10 +14,10 @@ router
 .route('/:id')
   .get(filmController.getFilm)
   .patch(authController.protect,
-    authController.restrictTo('admin', 'associate'),
+    authController.restrictTo('admin'),
     filmController.updateFilm)
   .delete(authController.protect,
-    authController.restrictTo('admin', 'associate'),
+    authController.restrictTo('admin'),
     filmController.deleteFilm);
 
 router
@@ -25,5 +25,7 @@ router
     .get(filmController.aliasFilm, filmController.getAllFilms);
 
 
+// mounting to reviewRoutes as working with reviews
+router.use('/:filmId/reviews', reviewRoutes); // it matches the '/' route
 
 module.exports = router;
