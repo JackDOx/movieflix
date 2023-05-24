@@ -65,6 +65,12 @@ const filmSchema = new mongoose.Schema(
     trim: true
     },
 
+    filmType: {
+      type: String,
+      enum: ['Series', 'Movies'],
+      required: [true, 'A film must have a type- series or movies']
+    },
+
     genres: {
       type: [String],
       enum: ['Action', 'Comedy', 'Drama','Fantasy', 'Horror', 'Romance', 'Sci-Fi', 'Thriller', 'Anime', 'K-Drama'],
