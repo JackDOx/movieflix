@@ -7,13 +7,18 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const compression = require('compression');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const filmRouter = require('./routes/filmRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
-const cookieParser = require('cookie-parser');
+const paymentRouter = require('./routes/paymentRoutes');
+const productRouter = require('./routes/productRoutes');
+const paymentController = require('./controllers/paymentController');
 
 
 const app = express();
@@ -23,6 +28,11 @@ app.enable('trust proxy');
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 // 1) GLOBAL MIDDLEWARE
+
+//cross-origin resource sharing
+app.use(cors());
+// Allow other type of http request like patch, delete to use cors. " means every routes"
+app.options('*', cors());
 
 // Serving static files
 // app.use(express.static(`${__dirname}/public`)); 
@@ -46,6 +56,9 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter); // apply this limiter to /api
+
+// Stripe webhook for payment
+app.post('/webhook-checkout', bodyParser.raw({ type: 'application/json' }), paymentController.webhookCheckout);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb'})); // limit to 10kb request
@@ -82,9 +95,12 @@ app.use((req,res,next) => {
 
 // Mounting Routes
 // app.use('/', viewRouter);
- app.use('/api/v1/film', filmRouter);
- app.use('/api/v1/user', userRouter);
- app.use('/api/v1/review', reviewRouter);
+
+app.use('/api/v1/film', filmRouter);
+app.use('/api/v1/user', userRouter);
+app.use('/api/v1/review', reviewRouter);
+app.use('/api/v1/payment', paymentRouter);
+app.use('/api/v1/product', productRouter);
 // app.use('/api/v1/users', userRouter); //tourRouter is a middleware
 // app.use('/api/v1/reviews', reviewRouter);
 // app.use('/api/v1/bookings', bookingRouter);
