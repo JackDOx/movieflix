@@ -21,15 +21,15 @@ const createSendToken = (user, statusCode, res) =>{
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN *24*60*60*1000),
     httpOnly: true, // httpOnly is cookie only be recieved and sent not be read
-    secure: false
+    secure: true
   };
 
   // use SET will make production has a white space after it
   // if(process.env.NODE_ENV === 'production ') {
   //   cookieOptions.secure = true;  // secure will make the cookie can't be read
   // };
-  if(process.env.NODE_ENV != 'development') {
-    cookieOptions.secure = true;  // secure will make the cookie can't be read
+  if(process.env.NODE_ENV === 'development') {
+    cookieOptions.secure = false;  // secure will make the cookie can't be read
   };
 
   res.cookie('jwt', token, cookieOptions);
