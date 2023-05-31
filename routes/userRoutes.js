@@ -12,6 +12,13 @@ router.get('/logout', authController.logout);
 router.post('/forgotPassword', authController.forgotPassword);
 router.patch('/resetPassword/:token', authController.resetPassword);
 
+
+// MIDDLEWARE ROUTE FOR FRONT-END CALL TO CHECK isLoggedIn user
+router
+.route('/isLoggedIn')
+  .get(authController.isLoggedIn);
+
+  
 // This part requires authenticated logged in user
 router.use(authController.protect); // this middleware will be applied all the code below this line
 
@@ -22,6 +29,7 @@ router.patch('/updateMe',
   userController.resizeUserPhoto,
   userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
+
 
 // this part is restricte to Admin only
 router.use(authController.restrictTo('admin'));
@@ -36,6 +44,7 @@ router
   .get(userController.getUser)
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
+
 
 
 

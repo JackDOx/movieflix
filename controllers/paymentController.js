@@ -53,6 +53,9 @@ const createBookingCheckout = async session => {
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.amount_total / 100;
   await Payment.create({ product, user, price });
+  await User.findByIdAndUpdate(req.user.id, {premium: true, premiumExpires: Date.now() + 30*24*60*60*1000}, {
+    runValidators: true
+  }); 
 
 };
 

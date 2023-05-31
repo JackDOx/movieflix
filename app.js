@@ -30,7 +30,7 @@ app.set('views', path.join(__dirname, 'views'));
 // 1) GLOBAL MIDDLEWARE
 
 //cross-origin resource sharing
-app.use(cors());
+app.use(cors({ credentials: true, origin: true }));
 // Allow other type of http request like patch, delete to use cors. " means every routes"
 app.options('*', cors());
 

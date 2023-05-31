@@ -47,8 +47,15 @@ const userSchema = new mongoose.Schema(
     passwordResetExpires: Date,
     active: {
       type: Boolean,
-      default: true,
-      select: false
+      default: true
+    },
+    premium: {
+      type: Boolean,
+      default: false
+    },
+    premiumExpires: {
+      type: Date,
+      default: Date.now() -10*60*1000
     }
   
   });
@@ -80,11 +87,6 @@ userSchema.pre('save', function(next) {
 
 });
 
-// Setting role to user
-userSchema.pre('save', function(next) {
-  this.role = "user";
-  next();
-});
 
 userSchema.pre(/^find/, function(next){
   // this point to the current query

@@ -47,10 +47,16 @@ const createSendToken = (user, statusCode, res) =>{
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create(req.body);
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm
+  });
 
-  const url = `${req.protocol}://${req.get('host')}/me`;
+  // const url = `${req.protocol}://${req.get('host')}/me`;
 
+  const url = `${req.protocol}://${process.env.FRONT_END_PROTOCOL}/me`;
   await new Email(newUser, url).sendWelcome();
   // 201- created statusCode
   createSendToken(newUser, 201, res);
@@ -129,21 +135,24 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
     // 2) Check if user still exists
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
-      return next();
+      next(new AppError('User not found', 401));
     };
     // 3) Check if user changed password after the token was issued
     if(currentUser.changedPasswordAfter(decoded.iat)){
-      return next();
+      next(new AppError('User not found', 401));
     };
 
     // THERE IF A LOGGED IN USER
-    res.locals.user = currentUser;
-    return next();
+    // res.locals.user = currentUser;
+    res.status(200).json({
+      status: 'Success',
+      user: currentUser
+    });
     } catch (err) {
-      return next();
+      next(new AppError('User not found', 401));
     };
-};
-  next();
+} else{
+    next(new AppError('User not found', 401));}
 });
 
 // Middleware with parameters
