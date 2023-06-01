@@ -10,6 +10,7 @@ const compression = require('compression');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -23,16 +24,28 @@ const paymentController = require('./controllers/paymentController');
 
 const app = express();
 
+// Trust proxy
 app.enable('trust proxy');
+
 // Setting pug engine and the file that hold the pug template: views
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+
 // 1) GLOBAL MIDDLEWARE
 
 //cross-origin resource sharing
 app.use(cors({ credentials: true, origin: true }));
 // Allow other type of http request like patch, delete to use cors. " means every routes"
 app.options('*', cors());
+
+// Session Cookie Settings
+app.use(session({
+ 
+    cookie: { secure: true, samesite :'none' },
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: false
+  }));
 
 // Serving static files
 // app.use(express.static(`${__dirname}/public`)); 
@@ -49,13 +62,13 @@ if (process.env.NODE_ENV === 'development') {
 };
 
 // SECURITY: limiting requests to server : 60 reqs in 1 hour
-const limiter = rateLimit({
-    max: 60,
-    windowMs: 60*60*1000,
-    message: 'Too many requests from this ip, please try again in an hour'
-});
+// const limiter = rateLimit({
+//     max: 60,
+//     windowMs: 60*60*1000,
+//     message: 'Too many requests from this ip, please try again in an hour'
+// });
 
-app.use('/api', limiter); // apply this limiter to /api
+// app.use('/api', limiter); // apply this limiter to /api
 
 // Stripe webhook for payment
 app.post('/webhook-checkout', bodyParser.raw({ type: 'application/json' }), paymentController.webhookCheckout);
