@@ -30,8 +30,8 @@ exports.getCheckoutSession = catchAsync(async(req, res, next) =>{
      // cancel_url: `${req.protocol}://${req.get('host')}/${product.slug}`, //user will be redirected to this url when payment has an issue. product page (previous page)
     //  success_url: `${req.protocol}://${req.get('host')}/?product=${product.id}&user=${req.user.id}&price=${product.price}`,
     //  cancel_url: `${req.protocol}://${req.get('host')}/product/${product.slug}`,
-    success_url: `${req.protocol}://${req.get('host')}/?alert=paymentSuccess`,
-    cancel_url: `${req.protocol}://${req.get('host')}/?aler=paymentFail`,
+    success_url: `${req.protocol}://webclient-production.up.railway.app/profile/premium/result/?alert=paymentSuccess`,
+    cancel_url: `${req.protocol}://webclient-production.up.railway.app/profile/premium/result/?alert=paymentFail`,
      customer_email: req.user.email,
      client_reference_id: req.params.productId, //this field allows us to pass in some data about this session that we are currently creating.
      line_items: transformedItems,
@@ -42,10 +42,11 @@ exports.getCheckoutSession = catchAsync(async(req, res, next) =>{
 
 
   // 3) Create session as response
-  res.status(200).json({
-     status: 'success',
-     session
-  })
+  // res.status(200).json({
+  //    status: 'success',
+  //    session
+  // })
+  res.redirect(303, session.url);
 });
 
 const createBookingCheckout = async session => {
