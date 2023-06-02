@@ -36,7 +36,7 @@ exports.getCheckoutSession = catchAsync(async(req, res, next) =>{
      client_reference_id: req.params.productId, //this field allows us to pass in some data about this session that we are currently creating.
      line_items: transformedItems,
      mode: 'payment',
-
+//RAC HM
  });
 
 
