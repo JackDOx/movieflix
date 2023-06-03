@@ -39,14 +39,6 @@ app.use(cors({ credentials: true, origin: true }));
 // Allow other type of http request like patch, delete to use cors. " means every routes"
 app.options('*', cors());
 
-// Session Cookie Settings
-app.use(session({
- 
-    cookie: { secure: true, samesite :'none' },
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: false
-  }));
 
 // Serving static files
 // app.use(express.static(`${__dirname}/public`)); 
@@ -72,7 +64,16 @@ if (process.env.NODE_ENV === 'development') {
 // app.use('/api', limiter); // apply this limiter to /api
 
 // Stripe webhook for payment
-app.post('/webhook-checkout', bodyParser.raw({type: "*.*"}), paymentController.webhookCheckout);
+app.post('/webhook-checkout', bodyParser.raw({type: "*/*"}), paymentController.webhookCheckout);
+
+// Session Cookie Settings
+app.use(session({
+ 
+    cookie: { secure: true, samesite :'none' },
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: false
+  }));
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb'})); // limit to 10kb request
