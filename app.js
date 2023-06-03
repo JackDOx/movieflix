@@ -39,7 +39,14 @@ app.use(cors({ credentials: true, origin: true }));
 // Allow other type of http request like patch, delete to use cors. " means every routes"
 app.options('*', cors());
 
-
+// Session Cookie Settings
+app.use(session({
+ 
+    cookie: { secure: true, samesite :'none' },
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: false
+  }));
 // Serving static files
 // app.use(express.static(`${__dirname}/public`)); 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -62,22 +69,21 @@ if (process.env.NODE_ENV === 'development') {
 // });
 
 // app.use('/api', limiter); // apply this limiter to /api
-
+app.use((req, res, next) => {
+  if (req.originalUrl === '/webhook') {
+    next(); // Do nothing with the body because I need it in a raw state.
+  } else {
+    express.json();  // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
+  }
+});
 // Stripe webhook for payment
-app.post('/webhook-checkout', bodyParser.raw({ type: 'application/json' }), paymentController.webhookCheckout);
+// app.post('/webhook-checkout', bodyParser.raw({ type: 'application/json' }), paymentController.webhookCheckout);
 
-// Session Cookie Settings
-app.use(session({
- 
-    cookie: { secure: true, samesite :'none' },
-    secret: 'your-secret-key',
-    resave: false,
-    saveUninitialized: false
-  }));
+
 
 // Body parser, reading data from body into req.body
 // app.use(express.json({ limit: '10kb'})); // limit to 10kb request
-app.use(express.urlencoded({ extended: true, limit: '10kb' })); // this code is to parse the data from .form
+// app.use(express.urlencoded({ extended: true, limit: '10kb' })); // this code is to parse the data from .form
 app.use(cookieParser()); // parse the data from cookie
 
 // Data santinization against NoSQL query injection
