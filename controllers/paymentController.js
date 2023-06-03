@@ -51,13 +51,13 @@ exports.getCheckoutSession = catchAsync(async(req, res, next) =>{
 });
 
 const createBookingCheckout = async session => {
-  const product = session.client_reference_id;
-  const user = (await User.findOneAndUpdate({ email: session.customer_email }, {premium: true, premiumExpires: Date.now() + 30*24*60*60*1000},{
-    new: true,
-    runValidators: true
-  })).id;
-  const price = session.amount_total / 100;
-  await Payment.create({ product, user, price });
+//   const product = session.client_reference_id;
+//   const user = (await User.findOneAndUpdate({ email: session.customer_email }, {premium: true, premiumExpires: Date.now() + 30*24*60*60*1000},{
+//     new: true,
+//     runValidators: true
+//   })).id;
+//   const price = session.amount_total / 100;
+//   await Payment.create({ product, user, price });
 
 };
 
