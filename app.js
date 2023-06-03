@@ -72,7 +72,7 @@ if (process.env.NODE_ENV === 'development') {
 // app.use('/api', limiter); // apply this limiter to /api
 
 // Stripe webhook for payment
-app.post('/webhook-checkout', bodyParser.raw({ type: 'application/json' }), paymentController.webhookCheckout);
+app.post('/webhook-checkout', express.raw({type: 'application/json'}), paymentController.webhookCheckout);
 
 // Body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb'})); // limit to 10kb request

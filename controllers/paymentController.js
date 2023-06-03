@@ -72,9 +72,9 @@ const createBookingCheckout = async session => {
 //   res.redirect(req.originalUrl.split('?')[0]); // redirect to the product page of that booked product
 // };.
 
-exports.webhookCheckout = (req, res, next) => {
+exports.webhookCheckout = (req, res) => {
   const signature = req.headers['stripe-signature'];
-  console.log(req);
+
   let event;
   try {
     event = stripe.webhooks.constructEvent(
