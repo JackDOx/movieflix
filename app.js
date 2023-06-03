@@ -21,7 +21,6 @@ const paymentRouter = require('./routes/paymentRoutes');
 const productRouter = require('./routes/productRoutes');
 const paymentController = require('./controllers/paymentController');
 const saveRouter = require('./routes/saveRoutes');
-const User = require('./models/userModel');
 
 
 const app = express();
@@ -71,51 +70,8 @@ const limiter = rateLimit({
 
 app.use('/api', limiter); // apply this limiter to /api
 
-const createBookingCheckout = async session => {
-//   const product = session.client_reference_id;
-//   const user = (await User.findOneAndUpdate({ email: session.customer_email }, {premium: true, premiumExpires: Date.now() + 30*24*60*60*1000},{
-//     new: true,
-//     runValidators: true
-//   })).id;
-//   const price = session.amount_total / 100;
-//   await Payment.create({ product, user, price });
-
-};
-
-// exports.createBookingCheckout = async (req, res, next) => {
-//   const {product, user, price} = req.query;
-
-//   if (!product && !user && !price) {
-//     return next();
-//   };
-//   await Product.create({ product,user,price});
-  
-//   res.redirect(req.originalUrl.split('?')[0]); // redirect to the product page of that booked product
-// };.
-
-const webhookCheckout = (req, res, next) => {
-  const signature = req.headers['stripe-signature'];
-console.log(signature);
-  let event;
-   try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
-   console.log(event);
-  } catch (err) {
-    return res.status(400).send(err);
-  }
-
-  if (event.type === 'checkout.session.completed')
-    createBookingCheckout(event.data.object);
-
-  res.status(200).json({ received: true });
-};
 // Stripe webhook for payment
-app.post('/webhook-checkout', bodyParser.raw({ type: '*/*' }), webhookCheckout);
-
+app.post('/webhook-checkout', bodyParser.raw({ type: '*/*' }), paymentController.webhookCheckout);
 
 
 // Body parser, reading data from body into req.body
