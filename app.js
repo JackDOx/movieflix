@@ -64,7 +64,7 @@ if (process.env.NODE_ENV === 'development') {
 // app.use('/api', limiter); // apply this limiter to /api
 
 // Stripe webhook for payment
-app.post('/webhook-checkout', express.raw({ type: 'application/json' }), paymentController.webhookCheckout);
+app.post('/webhook-checkout',  paymentController.webhookCheckout);
 
 // Session Cookie Settings
 app.use(session({
