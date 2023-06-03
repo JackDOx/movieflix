@@ -72,7 +72,7 @@ const createBookingCheckout = async session => {
 //   res.redirect(req.originalUrl.split('?')[0]); // redirect to the product page of that booked product
 // };.
 
-exports.webhookCheckout = (req, res) => {
+exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
 
   let event;
