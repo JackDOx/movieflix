@@ -29,6 +29,7 @@ router.patch('/updateMe',
   userController.resizeUserPhoto,
   userController.updateMe);
 router.delete('/deleteMe', userController.deleteMe);
+router.get('/mySave', userController.getMySave);
 
 
 // this part is restricte to Admin only

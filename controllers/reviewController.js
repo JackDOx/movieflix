@@ -28,7 +28,7 @@ exports.setFilmUserIds = (req, res, next) => {
       req.body.user = req.user.id; // req.user comes from protect middleware
     };
     next();
-}
+};
 
 // exports.createReview = catchAsync( async (req, res, next) => {
 

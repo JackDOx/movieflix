@@ -60,6 +60,14 @@ const userSchema = new mongoose.Schema(
   
   });
   
+
+userSchema.virtual('saves', {
+  ref: 'Save',
+  localField: '_id',
+  foreignField: 'user'
+});
+  
+
 // MIDDLEWARE
 
 userSchema.pre('save', async function(next) {

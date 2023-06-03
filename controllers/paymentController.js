@@ -30,8 +30,8 @@ exports.getCheckoutSession = catchAsync(async(req, res, next) =>{
      // cancel_url: `${req.protocol}://${req.get('host')}/${product.slug}`, //user will be redirected to this url when payment has an issue. product page (previous page)
     //  success_url: `${req.protocol}://${req.get('host')}/?product=${product.id}&user=${req.user.id}&price=${product.price}`,
     //  cancel_url: `${req.protocol}://${req.get('host')}/product/${product.slug}`,
-    success_url: `${req.protocol}://${req.get('host')}/?alert=paymentSuccess`,
-    cancel_url: `${req.protocol}://${req.get('host')}/?aler=paymentFail`,
+    success_url: `${req.protocol}://${process.env.FRONT_ENV_PROTOCOL}/home?alert=paymentSuccess`,
+    cancel_url: `${req.protocol}://${process.env.FRONT_ENV_PROTOCOL}/home?alert=paymentFail`,
      customer_email: req.user.email,
      client_reference_id: req.params.productId, //this field allows us to pass in some data about this session that we are currently creating.
      line_items: transformedItems,
@@ -72,7 +72,7 @@ const createBookingCheckout = async session => {
 
 exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
-
+  console.log(signature);
   let event;
   try {
     event = stripe.webhooks.constructEvent(

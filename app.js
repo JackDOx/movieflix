@@ -20,6 +20,7 @@ const reviewRouter = require('./routes/reviewRoutes');
 const paymentRouter = require('./routes/paymentRoutes');
 const productRouter = require('./routes/productRoutes');
 const paymentController = require('./controllers/paymentController');
+const saveRouter = require('./routes/saveRoutes');
 
 
 const app = express();
@@ -114,6 +115,7 @@ app.use('/api/v1/user', userRouter);
 app.use('/api/v1/review', reviewRouter);
 app.use('/api/v1/payment', paymentRouter);
 app.use('/api/v1/product', productRouter);
+app.use('/api/v1/save', saveRouter);
 // app.use('/api/v1/users', userRouter); //tourRouter is a middleware
 // app.use('/api/v1/reviews', reviewRouter);
 // app.use('/api/v1/bookings', bookingRouter);

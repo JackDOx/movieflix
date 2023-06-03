@@ -1,4 +1,5 @@
 const User = require('./../models/userModel');
+const Save = require('./../models/saveModel');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const factory = require('./handlerFactory');
@@ -134,3 +135,12 @@ exports.getMe = (req, res, next) => {
 exports.createUser = factory.createOne(User);
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);
+
+exports.getMySave = catchAsync(async (req, res, next) => {
+  let data = await User.findById(req.user.id).lean().populate('saves');
+
+  res.status(200).json({
+    status: 'success',
+    data
+  });
+});
