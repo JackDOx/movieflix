@@ -18,7 +18,7 @@ exports.getCheckoutSession = catchAsync(async(req, res, next) =>{
          product_data: {
              name: `${product.name}`,
              description: product.description, //description here
-             images: [`${req.protocol}://${req.get('host')}/img/tours/${product.imageCover}`], //only accepts live images (images hosted on the internet),
+//              images: [`${req.protocol}://${req.get('host')}/img/tours/${product.imageCover}`], //only accepts live images (images hosted on the internet),
          },
      },
  }];
@@ -79,7 +79,7 @@ exports.webhookCheckout = (req, res) => {
   try {
     event = stripe.webhooks.constructEvent(
       req.body,
-      signature.toString(),
+      signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
