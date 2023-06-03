@@ -62,28 +62,22 @@ if (process.env.NODE_ENV === 'development') {
 };
 
 // SECURITY: limiting requests to server : 60 reqs in 1 hour
-// const limiter = rateLimit({
-//     max: 60,
-//     windowMs: 60*60*1000,
-//     message: 'Too many requests from this ip, please try again in an hour'
-// });
-
-// app.use('/api', limiter); // apply this limiter to /api
-app.use((req, res, next) => {
-  if (req.originalUrl === '/webhook') {
-    next(); // Do nothing with the body because I need it in a raw state.
-  } else {
-    express.json();  // ONLY do express.json() if the received request is NOT a WebHook from Stripe.
-  }
+const limiter = rateLimit({
+    max: 60,
+    windowMs: 60*60*1000,
+    message: 'Too many requests from this ip, please try again in an hour'
 });
+
+app.use('/api', limiter); // apply this limiter to /api
+
 // Stripe webhook for payment
-// app.post('/webhook-checkout', bodyParser.raw({ type: 'application/json' }), paymentController.webhookCheckout);
+app.post('/webhook-checkout', bodyParser.raw({ type: '*/*' }), paymentController.webhookCheckout);
 
 
 
 // Body parser, reading data from body into req.body
-// app.use(express.json({ limit: '10kb'})); // limit to 10kb request
-// app.use(express.urlencoded({ extended: true, limit: '10kb' })); // this code is to parse the data from .form
+app.use(express.json({ limit: '10kb'})); // limit to 10kb request
+app.use(express.urlencoded({ extended: true, limit: '10kb' })); // this code is to parse the data from .form
 app.use(cookieParser()); // parse the data from cookie
 
 // Data santinization against NoSQL query injection
