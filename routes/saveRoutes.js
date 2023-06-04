@@ -8,16 +8,21 @@ const router = express.Router();
 // Require login to work with reviews
 router.use(authController.protect);
 
+// User interations with Save List
+router.route('/mySave')
+  .get(saveController.setUserId, saveController.getMySave)
+  .patch(saveController.setUserId, saveController.updateMySave);
+
+// For Admin only
+router.use(authController.restrictTo('admin', 'associate'));
 router.route('/')
-  .get( authController.restrictTo('admin', 'associate'), saveController.getAllSaves)
-  .post( 
-    authController.restrictTo('admin', 'associate'),
-    saveController.createSave);
+  .get( saveController.getAllSaves)
+  .post( saveController.createSave);
 
 router.route('/:id')
-    .get(saveController.setUserId, saveController.getSave)
-    .delete(authController.restrictTo('admin', 'associate'), saveController.deleteSave)
-    .patch(saveController.setUserId, saveController.updateSave);
+    .get(saveController.getSave)
+    .delete( saveController.deleteSave)
+    .patch( saveController.updateSave);
 
   
 module.exports = router;

@@ -12,64 +12,37 @@ exports.setUserId = (req, res, next) => {
   next();
 };
 
-exports.getAllSaves = catchAsync(async (req, res, next) => {
-  let query = Model.findById(req.params.id);
-  if (popOptions) {
-    query = query.populate(popOptions); // populating the id with actual data
-  };
-
-  const doc = await query;   
-
-  if (!doc) {
-    return next(new AppError('No document found with that ID', 404));
-  };
-  res.status(200).json({
-    status: 'success',
-    data: doc
-  })
-});
-
-
+exports.getAllSaves = factory.getAll(Save);
 exports.getSave = factory.getOne(Save);
 exports.createSave = factory.createOne(Save);
-exports.updateSave = catchAsync(async (req, res, next) => {
+exports.updateSave = factory.updateOne(Save);
 
-  const rev = await Save.findById(req.params.id);
-
-  // req.body.user: current user | rev.user: owner of the Save
-  if(!rev || (req.body.user != rev.user.id)) {
-    return next(new AppError('No document found with that ID/ You dont own this Save List', 404));
-  };
-
-  const doc = await Save.findByIdAndUpdate(req.params.id, req.body, {
+exports.updateMySave = catchAsync(async (req, res, next) => {
+  
+  const filterBody = {film: req.body.film};
+  const doc = await Save.findOneAndUpdate({ user: req.body.user }, filterBody, {
     new: true,
     runValidators: true
   });
-
-
-
+  if (!doc) {
+    return next(new AppError('Can\'t update Save List', 404));
+  };
   res.status(200).json({
       status: 'success',
-      data: {
-        data: doc
-      }       
+      doc
   });
 }
 );
 
-exports.deleteSave = catchAsync(async (req, res, next) => {
-  
-  const doc = await Save.findByIdAndDelete(req.params.id);
-  // req.body.user: current user | rev.user: owner of the Save
-  if(!doc) {
-    return next(new AppError('No document found with that ID', 404));
+exports.getMySave = catchAsync(async (req, res, next) => {
+  const doc = await Save.findOne({ user: req.body.user });
+  if (!doc) {
+    return next(new AppError('Can\'t find that Save List/ Something went wrong', 404));
   };
-
-
-
-  res.status(204).json({ // 204 means no content
+  res.status(200).json({
     status: 'success',
-    data: null
-    });
-   
+    doc
+  });
 });
+
+exports.deleteSave = factory.deleteOne(Save);

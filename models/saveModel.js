@@ -19,6 +19,7 @@ const saveSchema = new mongoose.Schema({
 }
 );
 
+saveSchema.index({ user: 1});
 
 // MIDDLEWARE
 saveSchema.pre(/^find/, function(next) {
@@ -29,6 +30,7 @@ saveSchema.pre(/^find/, function(next) {
 
   next();
 });
+
 const Save = mongoose.model('Save', saveSchema);
 
 module.exports = Save;
