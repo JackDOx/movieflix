@@ -18,7 +18,7 @@ exports.getCheckoutSession = catchAsync(async(req, res, next) =>{
          product_data: {
              name: `${product.name}`,
              description: product.description, //description here
-             images: [`${req.protocol}://${req.get('host')}/img/tours/${product.imageCover}`], //only accepts live images (images hosted on the internet),
+//              images: [`${req.protocol}://${req.get('host')}/img/tours/${product.imageCover}`], //only accepts live images (images hosted on the internet),
          },
      },
  }];
@@ -72,7 +72,7 @@ const createBookingCheckout = async session => {
 //   res.redirect(req.originalUrl.split('?')[0]); // redirect to the product page of that booked product
 // };.
 
-exports.webhookCheckout = (req, res) => {
+exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
 
   let event;
