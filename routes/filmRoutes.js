@@ -30,13 +30,13 @@ router
     filmController.deleteFilm);
 
 
-
+router
+.route('/search')
+    .get(filmController.searchFilm);
 
 // mounting to reviewRoutes as working with reviews
 router.use('/:filmId/reviews', reviewRoutes); // it matches the '/' route
 
-router
-.route('/search')
-    .get(filmController.searchFilm);
+
 
 module.exports = router;
