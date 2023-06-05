@@ -2,10 +2,19 @@ const mongoose = require('mongoose');
 
 const saveSchema = new mongoose.Schema({
 
-  film: [{
-    type: mongoose.Schema.ObjectId,
-    ref: 'Film'
-  }],
+  film: {
+    type: [{
+      type: mongoose.Schema.ObjectId,
+      ref: 'Film'
+    }],
+    validate: {
+      validator: function(arr) {
+        const uniqueIds = new Set(arr.map(String)); // Convert each ObjectId to a string and create a Set
+        return uniqueIds.size === arr.length; // Check if the size of uniqueIds is the same as the array length
+      },
+      message: 'Each film ID must be unique within the array.'
+    }
+  },
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',

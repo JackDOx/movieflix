@@ -15,6 +15,31 @@ exports.createFilm = factory.createOne(Film);
 exports.updateFilm = factory.updateOne(Film);
 exports.deleteFilm = factory.deleteOne(Film);
 
+// Return the query that search for the genres of film
 exports.aliasFilm = catchAsync(async (req,res,next) => {
-  
+  req.query = {
+    genres : { $in: [req.query.genres]},
+    sort: '-date'
+  }
+  next();
+});
+
+// Search engine version v0.1 by Jack Do
+// Search return the query that match if the query is found in name, directors or actors field
+exports.searchFilm = catchAsync(async (req, res, next) => {
+  req.query.sort = '-date';
+
+  const searchString = req.query.search; // Assuming the search string is provided in the 'search' query parameter
+
+  if (searchString) {
+    req.query.$or = [
+      { name: { $regex: searchString, $options: 'i' } }, // Search film name (case-insensitive)
+      { directors: { $elemMatch: { $regex: searchString, $options: 'i' } } }, // Search director names (case-insensitive)
+      { actors: { $elemMatch: { $regex: searchString, $options: 'i' } } } // Search actor names (case-insensitive)
+    ];
+  }
+
+  delete req.query.search; // Remove the 'search' query parameter from the query object
+
+  next();
 });

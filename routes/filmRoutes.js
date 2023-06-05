@@ -10,6 +10,15 @@ router
   .get(filmController.getAllFilms)
   .post(authController.protect, authController.restrictTo('admin','associate'), filmController.createFilm);
 
+// Get film by category
+router
+.route('/film-category')
+  .get(filmController.aliasFilm, filmController.getAllFilms);
+
+router
+.route('/search')
+  .get(filmController.searchFilm, filmController.getAllFilms);
+
 router
 .route('/:id')
   .get(filmController.getFilm)
@@ -20,12 +29,14 @@ router
     authController.restrictTo('admin'),
     filmController.deleteFilm);
 
-router
-.route('/film-category/:category')
-    .get(filmController.aliasFilm, filmController.getAllFilms);
+
 
 
 // mounting to reviewRoutes as working with reviews
 router.use('/:filmId/reviews', reviewRoutes); // it matches the '/' route
+
+router
+.route('/search')
+    .get(filmController.searchFilm);
 
 module.exports = router;

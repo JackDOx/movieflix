@@ -11,7 +11,8 @@ router.use(authController.protect);
 // User interations with Save List
 router.route('/mySave')
   .get(saveController.setUserId, saveController.getMySave)
-  .patch(saveController.setUserId, saveController.updateMySave);
+  .patch(saveController.setUserId, saveController.updateMySave)
+  .delete(saveController.setUserId, saveController.deleteMySave);
 
 // For Admin only
 router.use(authController.restrictTo('admin', 'associate'));
