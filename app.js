@@ -68,7 +68,7 @@ const limiter = rateLimit({
     message: 'Too many requests from this ip, please try again in an hour'
 });
 
-app.use('/api', limiter); // apply this limiter to /api
+// app.use('/api', limiter); // apply this limiter to /api
 
 // Stripe webhook for payment
 app.post('/webhook-checkout', bodyParser.raw({ type: '*/*' }), paymentController.webhookCheckout);

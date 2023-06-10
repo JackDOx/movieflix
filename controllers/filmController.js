@@ -34,8 +34,8 @@ exports.searchFilm = catchAsync(async (req, res, next) => {
   if (searchString) {
     req.query.$or = [
       { name: { $regex: searchString, $options: 'i' } }, // Search film name (case-insensitive)
-      { directors: { $elemMatch: { $regex: searchString, $options: 'i' } } }, // Search director names (case-insensitive)
-      { actors: { $elemMatch: { $regex: searchString, $options: 'i' } } } // Search actor names (case-insensitive)
+      { director: {  $regex: searchString, $options: 'i' } }, // Search director names (case-insensitive)
+      { actors: { $elemMatch: { $regex: searchString, $options: 'i' } } } // Search actor names in arrat of actors (case-insensitive)
     ];
   }
 
