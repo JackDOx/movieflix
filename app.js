@@ -74,7 +74,7 @@ const limiter = rateLimit({
 // app.use('/api', limiter); // apply this limiter to /api
 
 // TRYE TEXT ROUTE FOR VIDEO /////////////////////////////////////////////////////////////
-app.use('/video', proxy('https://onedrive.live.com/download?cid=6E97BF06485D6B01&resid=6E97BF06485D6B01%2155040&authkey=AKRDTrT5StZtSmo'));
+// app.use('/video', proxy('https://onedrive.live.com/download?cid=6E97BF06485D6B01&resid=6E97BF06485D6B01%2155040&authkey=AKRDTrT5StZtSmo'));
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
