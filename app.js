@@ -73,42 +73,7 @@ const limiter = rateLimit({
 // app.use('/api', limiter); // apply this limiter to /api
 
 // TRYE TEXT ROUTE FOR VIDEO /////////////////////////////////////////////////////////////
-app.get("/video", async (req, res) => {
-  const videoUrl =
-    "https://onedrive.live.com/download?cid=6E97BF06485D6B01&resid=6E97BF06485D6B01%2155040&authkey=AKRDTrT5StZtSmo"; // Replace with your OneDrive video URL
-  const range = req.headers.range;
-
-  try {
-    const response = await axios.get(videoUrl, {
-      headers: {
-        Range: range,
-      },
-      responseType: "stream",
-    });
-
-    const videoSize = response.headers["content-length"];
-    const contentRange = response.headers["content-range"];
-
-    if (range) {
-      res.setHeader("Content-Range", contentRange);
-      res.setHeader("Accept-Ranges", "bytes");
-      res.setHeader("Content-Length", videoSize);
-      res.setHeader("Content-Type", "video/mp4");
-      res.writeHead(206);
-      response.data.pipe(res);
-    } else {
-      res.setHeader("Content-Length", videoSize);
-      res.setHeader("Content-Type", "video/mp4");
-      res.writeHead(200);
-      response.data.pipe(res);
-    }
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(500);
-  }
-});
-
-
+app.use('/video', proxy('https://onedrive.live.com/download?cid=6E97BF06485D6B01&resid=6E97BF06485D6B01%2155040&authkey=AKRDTrT5StZtSmo'));
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
