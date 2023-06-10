@@ -1,8 +1,8 @@
 const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
-const axios = require("axios");
-
+// const axios = require("axios");
+const request = require("request");
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
@@ -74,8 +74,21 @@ const limiter = rateLimit({
 // app.use('/api', limiter); // apply this limiter to /api
 
 // TRYE TEXT ROUTE FOR VIDEO /////////////////////////////////////////////////////////////
-// app.use('/video', proxy('https://onedrive.live.com/download?cid=6E97BF06485D6B01&resid=6E97BF06485D6B01%2155040&authkey=AKRDTrT5StZtSmo'));
 
+app.get("/video", (req, res) => {
+  const videoUrl =
+    "https://onedrive.live.com/download?cid=6E97BF06485D6B01&resid=6E97BF06485D6B01%2155040&authkey=AKRDTrT5StZtSmo"; // Replace with your OneDrive video URL
+  //Write head
+  const headers = {
+    "Content-Type": "video/mp4",
+    "Content-Disposition": 'attachment; filename="video.mp4"', // Set a custom filename if needed
+    // "X-Accel-Redirect": videoUrl, // Set the desired source URL
+  };
+
+  res.writeHead(200, headers);
+  // Proxy the video request to OneDrive
+  req.pipe(request(videoUrl)).pipe(res);
+});
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
