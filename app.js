@@ -24,6 +24,7 @@ const paymentRouter = require('./routes/paymentRoutes');
 const productRouter = require('./routes/productRoutes');
 const paymentController = require('./controllers/paymentController');
 const saveRouter = require('./routes/saveRoutes');
+const catchAsync = require('./utils/catchAsync');
 
 
 const app = express();
@@ -75,7 +76,7 @@ const limiter = rateLimit({
 
 // TRYE TEXT ROUTE FOR VIDEO /////////////////////////////////////////////////////////////
 
-app.get("/video", (req, res) => {
+app.get("/video", catchAsync(async (req, res) => {
   const videoUrl =
     "https://onedrive.live.com/download?cid=6E97BF06485D6B01&resid=6E97BF06485D6B01%2155040&authkey=AKRDTrT5StZtSmo"; // Replace with your OneDrive video URL
   //Write head
@@ -88,7 +89,7 @@ app.get("/video", (req, res) => {
   res.writeHead(200, headers);
   // Proxy the video request to OneDrive
   req.pipe(request(videoUrl)).pipe(res);
-});
+}));
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
