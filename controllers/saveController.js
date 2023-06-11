@@ -59,7 +59,7 @@ exports.deleteMySave = catchAsync(async (req, res, next) => {
 });
 
 exports.getMySave = catchAsync(async (req, res, next) => {
-  let doc = await Save.findOne({ user: req.body.user });
+  let doc = await Save.findOne({ user: req.body.user }).populate('film');
   if (!doc) {
     doc = await Save.create({ user: req.body.user, film: []});
   };
