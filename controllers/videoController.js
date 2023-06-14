@@ -15,6 +15,8 @@ exports.pipeVideo = catchAsync(async (req, res, next) => {
     return next(new AppError('Video not found',404));
   };
 
+    // Set the status code
+  res.status(200);
   //Write head
   res.set('Content-Type', 'video/mp4');
   res.set('Content-Disposition', 'attachment; filename="video.mp4"');
