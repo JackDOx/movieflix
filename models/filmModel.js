@@ -34,7 +34,8 @@ const filmSchema = new mongoose.Schema(
     type: String,
     required: [true, 'A film must have a source link'],
     validate: [validator.isURL, 'Link source film must be in URL format'],
-    trim: true
+    trim: true,
+    select: false
     },
 
     description: {

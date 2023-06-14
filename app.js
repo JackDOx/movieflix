@@ -23,6 +23,7 @@ const reviewRouter = require('./routes/reviewRoutes');
 const paymentRouter = require('./routes/paymentRoutes');
 const productRouter = require('./routes/productRoutes');
 const paymentController = require('./controllers/paymentController');
+const videoRouter = require('./routes/videoRoutes');
 const saveRouter = require('./routes/saveRoutes');
 const catchAsync = require('./utils/catchAsync');
 
@@ -74,31 +75,6 @@ const limiter = rateLimit({
 
 // app.use('/api', limiter); // apply this limiter to /api
 
-// TRYE TEXT ROUTE FOR VIDEO /////////////////////////////////////////////////////////////
-
-app.get("/video", catchAsync(async (req, res) => {
-  const videoUrl =
-    "https://onedrive.live.com/download?cid=6E97BF06485D6B01&resid=6E97BF06485D6B01%2155040&authkey=AKRDTrT5StZtSmo"; // Replace with your OneDrive video URL
-  //Write head
-  const headers = {
-    "Content-Type": "video/mp4",
-    "Content-Disposition": 'attachment; filename="video.mp4"', // Set a custom filename if needed
-    // "X-Accel-Redirect": videoUrl, // Set the desired source URL
-  };
-
-  res.writeHead(200, headers);
-  // Proxy the video request to OneDrive
-  req.pipe(request(videoUrl)).pipe(res);
-}));
-
-//////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
 // Stripe webhook for payment
 app.post('/webhook-checkout', bodyParser.raw({ type: '*/*' }), paymentController.webhookCheckout);
 
@@ -145,9 +121,7 @@ app.use('/api/v1/review', reviewRouter);
 app.use('/api/v1/payment', paymentRouter);
 app.use('/api/v1/product', productRouter);
 app.use('/api/v1/save', saveRouter);
-// app.use('/api/v1/users', userRouter); //tourRouter is a middleware
-// app.use('/api/v1/reviews', reviewRouter);
-// app.use('/api/v1/bookings', bookingRouter);
+app.use('/api/v1/video', videoRouter);
 
 app.all('*', (req, res, next) => {  // all means all methods, * means all url
     // res.status(404).json({
