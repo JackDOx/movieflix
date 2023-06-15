@@ -20,7 +20,7 @@ router
   .get(filmController.searchFilm, filmController.getAllFilms);
 
 router
-.route('/:id')
+.route('/:slug')
   .get(filmController.getFilm)
   .patch(authController.protect,
     authController.restrictTo('admin'),

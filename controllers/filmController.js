@@ -10,7 +10,22 @@ const sharp = require('sharp');
 // FACTORY version
 
 exports.getAllFilms = factory.getAll(Film);
-exports.getFilm = factory.getOne(Film, { path: 'reviews'});
+exports.getFilm = catchAsync(async (req, res, next) => {
+  let film = await Film.findOne({slug: req.params.slug});
+  if (!film) {
+    film = await Film.findById(req.params.slug);
+    if (!film) {
+    return next(new AppError('No film found', 404));
+    };
+  };
+
+  film.populate({ path: 'reviews' });
+
+  res.status(200).json({
+    status: 'success',
+    data: film
+  });
+});
 exports.createFilm = factory.createOne(Film);
 exports.updateFilm = factory.updateOne(Film);
 exports.deleteFilm = factory.deleteOne(Film);
