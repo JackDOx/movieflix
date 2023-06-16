@@ -31,8 +31,8 @@ exports.getCheckoutSession = catchAsync(async(req, res, next) =>{
     //  success_url: `${req.protocol}://${req.get('host')}/?product=${product.id}&user=${req.user.id}&price=${product.price}`,
     //  cancel_url: `${req.protocol}://${req.get('host')}/product/${product.slug}`,
 
-    success_url: `${req.protocol}://${process.env.FRONT_END_PROTOCOL}/profile/premium/result/?status=success`,
-    cancel_url: `${req.protocol}://${process.env.FRONT_END_PROTOCOL}/profile/premium/result/?status=fail`,
+    success_url: `${req.protocol}://${process.env.FRONT_END_DOMAIN}/profile/premium/result/?status=success`,
+    cancel_url: `${req.protocol}://${process.env.FRONT_END_DOMAIN}/profile/premium/result/?status=fail`,
 
      customer_email: req.user.email,
      client_reference_id: req.params.productId, //this field allows us to pass in some data about this session that we are currently creating.

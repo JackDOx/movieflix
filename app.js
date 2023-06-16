@@ -115,9 +115,9 @@ app.use((req,res,next) => {
 // Mounting Routes
 // app.use('/', viewRouter);
 app.use(catchAsync(async (req, res, next) => {
-    console.log(req.headers.origin);
+    // console.log(req.headers.origin);
     if (process.env.NODE_ENV == 'production' && (req.headers.origin !== process.env.FRONT_END_PROTOCOL)) {
-        return next(new AppError('Prohibited! you can not access the video this way', 401));
+        return next(new AppError('Prohibited!', 401));
       };
     
     next();
