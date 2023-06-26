@@ -26,8 +26,15 @@ const filmSchema = new mongoose.Schema(
     }
     },
 
-    date: {
-    type: Date,
+    year: {
+      type: Date,
+      required: [true, 'film must have a publish year'],
+      trim: true
+    },
+
+    uploadDate: {
+      type: Date,
+      default: Date.now(),
     },
 
     link: {
