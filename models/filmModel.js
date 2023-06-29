@@ -81,7 +81,8 @@ const filmSchema = new mongoose.Schema(
 
     genres: {
       type: [String],
-      enum: ['Action', 'Comedy', 'Drama','Fantasy', 'Horror', 'Romance', 'Sci-Fi', 'Thriller', 'Anime', 'K-Drama'],
+      enum: ['Action & Adventure', 'Comedy', 'Drama','Fantasy', 
+      'Horror', 'Romance', 'Sci-Fi', 'Thriller', 'Anime & Anime', 'K-Drama', "Children & Family", "Classic", "Asian & Chinese", "Cinema"],
       required: [true, 'Must have genre tag']
     },
 
