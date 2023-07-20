@@ -13,13 +13,22 @@ const filmSchema = new mongoose.Schema(
       // validate: [validator.isAlpha, 'Tour name must only contain chars'] // use of validator
    },
 
+    name_vn:{
+      type: String,
+      required: [true, 'A film must have a Vietnamese name'],
+      trim: true,
+      maxlength: [30, 'A film must have fewer or equal 30 chars'],
+      minlength: [1, 'A film name must have more or equal 1 char']
+    },
+
     slug: String,
+    slug_vn: String,
 
     length: {
     type: String,
     validate: {
       validator: function (value) {
-        const timeFormatRegex = /^(?:[01]\d|2[0-3]):(?:[0-5]\d):(?:[0-5]\d)$/;
+        const timeFormatRegex = /^(?:[01]\d|2[0-3]):(?:[0-5]\d)$/;
         return timeFormatRegex.test(value);
       },
       message: 'Invalid length format. Length must be in HH:MM:SS format.',
@@ -38,16 +47,22 @@ const filmSchema = new mongoose.Schema(
     },
 
     link: {
-    type: String,
-    required: [true, 'A film must have a source link'],
-    validate: [validator.isURL, 'Link source film must be in URL format'],
-    trim: true,
-    select: false
+      type: String,
+      required: [true, 'A film must have a source link'],
+      validate: [validator.isURL, 'Link source film must be in URL format'],
+      trim: true,
+      select: false
     },
 
     description: {
-    type: String,
-    default: this.name
+      type: String,
+      default: this.name,
+      maxlength: [1000, 'The description of the film must be fewer or equal 500 words']
+    },
+    description_vn : {
+      type: String,
+      default: this.name,
+      maxlength: [1000, 'The description of the film must be fewer or equal 500 words']
     },
 
     poster: {
@@ -64,7 +79,7 @@ const filmSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: [true, 'A film must have a director'],
-      maxlength: [20, "A name must have fewer or equal 30 chars"],
+      maxlength: [30, "A name must have fewer or equal 30 chars"],
       minlength: [1, 'A name must have more or equal 1 chars']
     },
 
@@ -118,7 +133,7 @@ const filmSchema = new mongoose.Schema(
 
 // INDEXING
 filmSchema.index({ slug: 1});
-
+filmSchema.index({ slug_vn: 1});
 
 // Virtual populate
 filmSchema.virtual('reviews', {
@@ -131,6 +146,7 @@ filmSchema.virtual('reviews', {
 
 filmSchema.pre('save', function(next) {
   this.slug = slugify(this.name, {  lower: true });
+  this.slug_vn= slugify(this.name_vn, { lower: true});
   next();
 });
 
